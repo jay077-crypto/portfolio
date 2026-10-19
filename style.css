@@ -6,6 +6,7 @@ body {
 }
 
 nav {
+    --border-color: oklch(50% 10% 200 / 40%);
     display: flex;
     margin-bottom: 1em;
     border-bottom: 1px solid oklch(80% 3% 200);
@@ -20,13 +21,14 @@ nav a {
 }
 
 nav a.current {
-    border-bottom: 0.4em solid oklch(80% 3% 200);
+    border-bottom: 0.4em solid var(--border-color);
     padding-bottom: 0.1em;
 }
 
 :root {
     --color-accent: oklch(59.402% 0.19543 290.074);
     accent-color: var(--color-accent);
+    color-scheme: light dark;
 }
 
 nav a:hover {

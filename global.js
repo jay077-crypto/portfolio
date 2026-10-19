@@ -28,5 +28,16 @@ for (let p of pages) {
         url = BASE_PATH + url;
     }
 
-    nav.insertAdjacentHTML('beforeend', `<a href="${url}">${title}</a>`);
+    let a = document.createElement('a');
+    a.href = url;
+    a.textContent = title;
+    nav.append(a);
+
+    if (a.host === location.host && a.pathname === location.pathname) {
+        a.classList.add('current');
+    }
+
+    if (a.host !== location.host) {
+        a.target = '_blank';
+    }
 }
