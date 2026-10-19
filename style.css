@@ -39,7 +39,7 @@ nav a:hover {
 
 input,
 textarea,
-button {
+button, select {
     font: inherit;
 }
 
@@ -91,4 +91,11 @@ h1,h2,h3,h4,h5,h6 {
 
 .resume section {
     border-bottom: 1px solid oklch(80% 3% 200);
+}
+
+.color-scheme {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 80%;
 }
