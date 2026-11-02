@@ -104,6 +104,16 @@ h1,h2,h3,h4,h5,h6 {
   max-width: 20em;
   margin-block: 2em;
   overflow: visible;
+
+  &:has(path:hover) {
+    path:not(:hover) {
+      opacity: 0.5;
+    }
+  }
+}
+
+#projects-plot path {
+  transition: 300ms;
 }
 
 .container {
