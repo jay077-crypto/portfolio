@@ -13,11 +13,13 @@ projectsTitle.textContent = `${projects.length} Projects`;
 
 let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
 
-let rolledData = d3.rollups(
-  projects,
-  (v) => v.length,
-  (d) => d.year,
-);
+function renderPieChart(projectsGiven) {
+    let rolledData = d3.rollups(
+    projectsGiven,
+    (v) => v.length,
+    (d) => d.year,
+    )
+};
 
 let data = rolledData.map(([year, count]) => {
   return { value: count, label: year };
@@ -30,6 +32,11 @@ let arcData = sliceGenerator(data);
 let arcs = arcData.map((d) => arcGenerator(d));
 
 let colors = d3.scaleOrdinal(d3.schemeTableau10);
+
+let svg = d3.select('#projects-plot');
+
+svg.selectAll('path').remove();
+legend.selectAll('li').remove();
 
 arcs.forEach((arc, idx) => {
   d3.select('svg')
@@ -47,6 +54,8 @@ data.forEach((d, idx) => {
     .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
 });
 
+renderPieChart(projects);
+
 let searchInput = document.querySelector('.searchBar');
 
 searchInput.addEventListener('change', (event) => {
@@ -58,4 +67,5 @@ searchInput.addEventListener('change', (event) => {
   });
 
   renderProjects(filteredProjects, projectsContainer, 'h2');
+  renderPieChart(filteredProjects);
 });
