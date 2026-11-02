@@ -28,7 +28,7 @@ let arcData = sliceGenerator(data);
 
 let arcs = arcData.map((d) => arcGenerator(d));
 
-let colors = ['gold', 'purple'];
+let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
 arcs.forEach((arc, idx) => {
   d3.select('svg')
