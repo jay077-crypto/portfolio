@@ -19,7 +19,7 @@ function renderPieChart(projectsGiven) {
     (v) => v.length,
     (d) => d.year,
     )
-};
+
 
 let data = rolledData.map(([year, count]) => {
   return { value: count, label: year };
@@ -34,18 +34,18 @@ let arcs = arcData.map((d) => arcGenerator(d));
 let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
 let svg = d3.select('#projects-plot');
+let legend = d3.select('.legend');
 
 svg.selectAll('path').remove();
 legend.selectAll('li').remove();
 
 arcs.forEach((arc, idx) => {
-  d3.select('svg')
+  svg
     .append('path')
     .attr('d', arc)
     .attr('fill', colors(idx));
 });
 
-let legend = d3.select('.legend');
 data.forEach((d, idx) => {
   legend
     .append('li')
@@ -53,6 +53,7 @@ data.forEach((d, idx) => {
     .attr('class', 'legend-item')
     .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
 });
+}
 
 renderPieChart(projects);
 
