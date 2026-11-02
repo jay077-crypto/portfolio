@@ -143,3 +143,11 @@ h1,h2,h3,h4,h5,h6 {
   height: 1em;
   background-color: var(--color);
 }
+
+.selected {
+  --color: oklch(60% 45% 0) !important;
+
+  &:is(path) {
+    fill: var(--color);
+  }
+}

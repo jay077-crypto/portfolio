@@ -1,6 +1,7 @@
 import { fetchJSON, renderProjects } from '../global.js';
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 let query = '';
+let selectedIndex = -1;
 
 const projects = await fetchJSON('../lib/projects.json');
 
@@ -18,7 +19,7 @@ function renderPieChart(projectsGiven) {
     projectsGiven,
     (v) => v.length,
     (d) => d.year,
-    )
+);
 
 
 let data = rolledData.map(([year, count]) => {
@@ -39,11 +40,22 @@ let legend = d3.select('.legend');
 svg.selectAll('path').remove();
 legend.selectAll('li').remove();
 
-arcs.forEach((arc, idx) => {
+arcs.forEach((arc, i) => {
   svg
     .append('path')
     .attr('d', arc)
-    .attr('fill', colors(idx));
+    .attr('fill', colors(i))
+    .on('click', () => {
+      selectedIndex = selectedIndex === i ? -1 : i;
+
+      svg
+        .selectAll('path')
+        .classed('selected', (_, idx) => idx === selectedIndex);
+
+      legend
+        .selectAll('li')
+        .classed('selected', (_, idx) => idx === selectedIndex);
+    });
 });
 
 data.forEach((d, idx) => {
