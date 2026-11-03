@@ -57,11 +57,11 @@ arcs.forEach((arc, i) => {
         .classed('selected', (_, idx) => idx === selectedIndex);
 
       if (selectedIndex === -1) {
-            renderProjects(projectsGiven, projectsContainer, 'h2');
+            renderProjects(projects, projectsContainer, 'h2');
       } else {
         let selectedYear = data[selectedIndex].label;
 
-        let filteredProjects = projectsGiven.filter(
+        let filteredProjects = projects.filter(
             (project) => project.year === selectedYear,
         );
 
