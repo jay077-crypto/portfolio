@@ -55,6 +55,18 @@ arcs.forEach((arc, i) => {
       legend
         .selectAll('li')
         .classed('selected', (_, idx) => idx === selectedIndex);
+
+      if (selectedIndex === -1) {
+            renderProjects(projectsGiven, projectsContainer, 'h2');
+      } else {
+        let selectedYear = data[selectedIndex].label;
+
+        let filteredProjects = projectsGiven.filter(
+            (project) => project.year === selectedYear,
+        );
+
+        renderProjects(filteredProjects, projectsContainer, 'h2');
+      }
     });
 });
 
