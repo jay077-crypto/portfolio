@@ -105,9 +105,7 @@ function renderScatterPlot(data, commits) {
   .attr('class', 'gridlines')
   .attr('transform', `translate(${usableArea.left}, 0)`);
 
-  gridlines.call(
-    d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width),
-  );
+  gridlines.call(d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width));
 
   const xAxis = d3.axisBottom(xScale);
   const yAxis = d3
