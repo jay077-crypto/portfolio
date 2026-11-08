@@ -165,3 +165,7 @@ h1,h2,h3,h4,h5,h6 {
 .stats dd {
   margin: 0;
 }
+
+#chart .gridlines {
+  opacity: 0.2;
+}
