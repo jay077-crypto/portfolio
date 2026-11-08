@@ -86,6 +86,34 @@ function renderScatterPlot(data, commits) {
     .scaleLinear()
     .domain([0, 24])
     .range([height, 0]);
+  const margin = { top: 10, right: 10, bottom: 30, left: 20 };
+
+  const usableArea = {
+    top: margin.top,
+    right: width - margin.right,
+    bottom: height - margin.bottom,
+    left: margin.left,
+    width: width - margin.left - margin.right,
+    height: height - margin.top - margin.bottom,
+  };
+
+  xScale.range([usableArea.left, usableArea.right]);
+  yScale.range([usableArea.bottom, usableArea.top]);
+
+  const xAxis = d3.axisBottom(xScale);
+  const yAxis = d3
+    .axisLeft(yScale)
+    .tickFormat((d) => String(d % 24).padStart(2, '0') + ':00');
+
+  svg
+    .append('g')
+    .attr('transform', `translate(0, ${usableArea.bottom})`)
+    .call(xAxis);
+
+  svg
+    .append('g')
+    .attr('transform', `translate(${usableArea.left}, 0)`)
+    .call(yAxis);
 
   const dots = svg.append('g').attr('class', 'dots');
 
