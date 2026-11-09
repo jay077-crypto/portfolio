@@ -66,6 +66,23 @@ function renderCommitInfo(data, commits) {
   dl.append('dd').text(d3.max(fileLengths, ([file, length]) => length));
 }
 
+function renderTooltipContent(commit) {
+  if (Object.keys(commit).length === 0) return;
+
+  const link = document.getElementById('commit-link');
+  link.href = commit.url;
+  link.textContent = commit.id;
+
+  document.getElementById('commit-date').textContent =
+    commit.datetime?.toLocaleString('en', { dateStyle: 'full' });
+
+  document.getElementById('commit-time').textContent =
+    commit.datetime?.toLocaleString('en', { timeStyle: 'short' });
+
+  document.getElementById('commit-author').textContent = commit.author;
+  document.getElementById('commit-lines').textContent = commit.totalLines;
+}
+
 function renderScatterPlot(data, commits) {
   const width = 1000;
   const height = 600;
@@ -131,7 +148,13 @@ function renderScatterPlot(data, commits) {
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
     .attr('r', 5)
-    .attr('fill', 'steelblue');
+    .attr('fill', 'steelblue')
+    .on('mouseenter', (event, commit) => {
+      renderTooltipContent(commit);
+    })
+    .on('mouseleave', () => {
+      // TODO: Hide the tooltip
+    });
 }
 
 let data = await loadData();

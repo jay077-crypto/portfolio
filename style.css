@@ -169,3 +169,35 @@ h1,h2,h3,h4,h5,h6 {
 #chart .gridlines {
   opacity: 0.2;
 }
+
+dl.info {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25em 0.75em;
+  margin: 0;
+}
+
+dl.info dt,
+dl.info dd {
+  margin: 0;
+}
+
+dl.info dt {
+  opacity: 0.65;
+}
+
+.tooltip {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+}
+
+#chart circle {
+  transition: transform 200ms;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+#chart circle:hover {
+  transform: scale(1.5);
+}
