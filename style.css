@@ -175,6 +175,13 @@ dl.info {
   grid-template-columns: max-content 1fr;
   gap: 0.25em 0.75em;
   margin: 0;
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
+}
+
+dl.info[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
 }
 
 dl.info dt,
@@ -190,6 +197,11 @@ dl.info dt {
   position: fixed;
   top: 1em;
   left: 1em;
+  background-color: Canvas;
+  color: CanvasText;
+  padding: 0.75em 1em;
+  border-radius: 0.5em;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
 }
 
 #chart circle {
