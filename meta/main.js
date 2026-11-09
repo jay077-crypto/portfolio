@@ -121,6 +121,7 @@ function brushed(event) {
   d3.select('#chart')
     .selectAll('.dots circle')
     .classed('selected', (d) => isCommitSelected(event.selection, d));
+  renderSelectionCount(event.selection);
 }
 
 function createBrushSelector(svg) {
@@ -138,13 +139,13 @@ function renderScatterPlot(data, commits) {
     .attr('viewBox', `0 0 ${width} ${height}`)
     .style('overflow', 'visible');
 
-  const xScale = d3
+  xScale = d3
     .scaleTime()
     .domain(d3.extent(commits, (d) => d.datetime))
     .range([0, width])
     .nice();
 
-  const yScale = d3
+  yScale = d3
     .scaleLinear()
     .domain([0, 24])
     .range([height, 0]);
