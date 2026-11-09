@@ -1,4 +1,6 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+let xScale;
+let yScale;
 
 async function loadData() {
   const data = await d3.csv('loc.csv', (row) => ({
@@ -94,8 +96,35 @@ function updateTooltipPosition(event) {
   tooltip.style.top = `${event.clientY}px`;
 }
 
+function isCommitSelected(selection, commit) {
+  if (!selection) return false;
+
+  const [[x0, y0], [x1, y1]] = selection;
+  const x = xScale(commit.datetime);
+  const y = yScale(commit.hourFrac);
+
+  return x >= x0 && x <= x1 && y >= y0 && y <= y1;
+}
+
+function renderSelectionCount(selection) {
+  const selectedCommits = selection
+    ? commits.filter((d) => isCommitSelected(selection, d))
+    : [];
+
+  const countElement = document.querySelector('#selection-count');
+  countElement.textContent = `${selectedCommits.length || 'No'} commits selected`;
+
+  return selectedCommits;
+}
+
+function brushed(event) {
+  d3.select('#chart')
+    .selectAll('.dots circle')
+    .classed('selected', (d) => isCommitSelected(event.selection, d));
+}
+
 function createBrushSelector(svg) {
-  svg.call(d3.brush());
+  svg.call(d3.brush().on('start brush end', brushed));
   svg.selectAll('.dots, .overlay ~ *').raise();
 }
 
