@@ -94,6 +94,11 @@ function updateTooltipPosition(event) {
   tooltip.style.top = `${event.clientY}px`;
 }
 
+function createBrushSelector(svg) {
+  svg.call(d3.brush());
+  svg.selectAll('.dots, .overlay ~ *').raise();
+}
+
 function renderScatterPlot(data, commits) {
   const width = 1000;
   const height = 600;
@@ -179,6 +184,8 @@ function renderScatterPlot(data, commits) {
       d3.select(event.currentTarget).style('fill-opacity', 0.7);
       updateTooltipVisibility(false);
     });
+
+    createBrushSelector(svg);
 }
 
 let data = await loadData();
