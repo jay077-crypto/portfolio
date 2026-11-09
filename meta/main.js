@@ -117,11 +117,39 @@ function renderSelectionCount(selection) {
   return selectedCommits;
 }
 
+function renderLanguageBreakdown(selection) {
+  const selectedCommits = selection
+    ? commits.filter((d) => isCommitSelected(selection, d))
+    : [];
+
+  const container = document.getElementById('language-breakdown');
+
+  if (selectedCommits.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const lines = selectedCommits.flatMap((d) => d.lines);
+  const breakdown = d3.rollup(lines, (v) => v.length, (d) => d.type);
+
+  container.innerHTML = '';
+
+  for (const [language, count] of breakdown) {
+    const formatted = d3.format('.1~%')(count / lines.length);
+
+    container.innerHTML += `
+      <dt>${language}</dt>
+      <dd>${count} lines (${formatted})</dd>
+    `;
+  }
+}
+
 function brushed(event) {
   d3.select('#chart')
     .selectAll('.dots circle')
     .classed('selected', (d) => isCommitSelected(event.selection, d));
   renderSelectionCount(event.selection);
+  renderLanguageBreakdown(event.selection);
 }
 
 function createBrushSelector(svg) {
