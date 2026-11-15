@@ -232,3 +232,13 @@ dl.info dt {
 #chart circle.selected {
   fill: #ff6b6b;
 }
+
+.projects img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.projects article {
+  min-width: 0;
+}
