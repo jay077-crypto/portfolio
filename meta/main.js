@@ -311,7 +311,7 @@ function updateFileDisplay(filteredCommits) {
 
   const filesContainer = d3
     .select('#files')
-    .selectAll('div')
+    .selectAll(':scope > div')
     .data(files, (d) => d.name)
     .join((enter) =>
       enter.append('div').call((div) => {
@@ -321,7 +321,12 @@ function updateFileDisplay(filteredCommits) {
     );
 
   filesContainer.select('dt > code').text((d) => d.name);
-  filesContainer.select('dd').text((d) => `${d.lines.length} lines`);
+  filesContainer
+    .select('dd')
+    .selectAll('div.loc')
+    .data((d) => d.lines)
+    .join('div')
+    .attr('class', 'loc');
 }
 
 function onTimeSliderChange() {
