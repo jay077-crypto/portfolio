@@ -11,6 +11,23 @@
 <body>
   <h1>Meta</h1>
   <p>This page shows statistics about the code in my portfolio.</p>
+
+  <div>
+    <label>
+      Show commits until:
+      <input
+        id="commit-progress"
+        type="range"
+        min="0"
+        max="100"
+        value="100"
+      >
+      <time id="commit-time"></time>
+    </label>
+  </div>
+
+<div id="stats"></div>
+
   <div id="stats"></div>
   <h2>Commits by time of day</h2>
   <div id="chart"></div>
