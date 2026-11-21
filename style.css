@@ -205,7 +205,7 @@ dl.info dt {
 }
 
 #chart circle {
-  transition: transform 200ms;
+  transition: transform 200ms, r 200ms;;
   transform-origin: center;
   transform-box: fill-box;
   @starting-style {
