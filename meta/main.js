@@ -302,6 +302,28 @@ let commitMaxTime = timeScale.invert(commitProgress);
 const commitSlider = document.getElementById('commit-progress');
 const commitTime = document.getElementById('commit-time');
 
+function updateFileDisplay(filteredCommits) {
+  const lines = filteredCommits.flatMap((d) => d.lines);
+
+  const files = d3
+    .groups(lines, (d) => d.file)
+    .map(([name, lines]) => ({ name, lines }));
+
+  const filesContainer = d3
+    .select('#files')
+    .selectAll('div')
+    .data(files, (d) => d.name)
+    .join((enter) =>
+      enter.append('div').call((div) => {
+        div.append('dt').append('code');
+        div.append('dd');
+      }),
+    );
+
+  filesContainer.select('dt > code').text((d) => d.name);
+  filesContainer.select('dd').text((d) => `${d.lines.length} lines`);
+}
+
 function onTimeSliderChange() {
   commitProgress = Number(commitSlider.value);
   commitMaxTime = timeScale.invert(commitProgress);
@@ -313,6 +335,7 @@ function onTimeSliderChange() {
 
   filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
   updateScatterPlot(data, filteredCommits);
+  updateFileDisplay(filteredCommits);
 }
 
 renderCommitInfo(data, commits);
