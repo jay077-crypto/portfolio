@@ -78,7 +78,7 @@ function renderTooltipContent(commit) {
   document.getElementById('commit-date').textContent =
     commit.datetime?.toLocaleString('en', { dateStyle: 'full' });
 
-  document.getElementById('commit-time').textContent =
+  document.getElementById('tooltip-commit-time').textContent =
     commit.datetime?.toLocaleString('en', { timeStyle: 'short' });
 
   document.getElementById('commit-author').textContent = commit.author;
@@ -205,11 +205,13 @@ function renderScatterPlot(data, commits) {
 
   svg
     .append('g')
+    .attr('class', 'x-axis')
     .attr('transform', `translate(0, ${usableArea.bottom})`)
     .call(xAxis);
 
   svg
     .append('g')
+    .attr('class', 'y-axis')
     .attr('transform', `translate(${usableArea.left}, 0)`)
     .call(yAxis);
 
@@ -246,8 +248,44 @@ function renderScatterPlot(data, commits) {
     createBrushSelector(svg);
 }
 
+function updateScatterPlot(data, commits) {
+  const svg = d3.select('#chart').select('svg');
+
+  xScale.domain(d3.extent(commits, (d) => d.datetime));
+
+  const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
+  const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
+
+  const xAxisGroup = svg.select('g.x-axis');
+  xAxisGroup.selectAll('*').remove();
+  xAxisGroup.call(d3.axisBottom(xScale));
+
+  const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+
+  svg.select('g.dots')
+    .selectAll('circle')
+    .data(sortedCommits)
+    .join('circle')
+    .attr('cx', (d) => xScale(d.datetime))
+    .attr('cy', (d) => yScale(d.hourFrac))
+    .attr('r', (d) => rScale(d.totalLines))
+    .attr('fill', 'steelblue')
+    .style('fill-opacity', 0.7)
+    .on('mouseenter', (event, commit) => {
+      d3.select(event.currentTarget).style('fill-opacity', 1);
+      renderTooltipContent(commit);
+      updateTooltipVisibility(true);
+      updateTooltipPosition(event);
+    })
+    .on('mouseleave', (event) => {
+      d3.select(event.currentTarget).style('fill-opacity', 0.7);
+      updateTooltipVisibility(false);
+    });
+}
+
 let data = await loadData();
 let commits = processCommits(data);
+let filteredCommits = commits;
 
 let commitProgress = 100;
 
@@ -272,10 +310,13 @@ function onTimeSliderChange() {
     dateStyle: 'long',
     timeStyle: 'short',
   });
-}
 
-commitSlider.addEventListener('input', onTimeSliderChange);
-onTimeSliderChange();
+  filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
+  updateScatterPlot(data, filteredCommits);
+}
 
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
+
+commitSlider.addEventListener('input', onTimeSliderChange);
+onTimeSliderChange();
