@@ -299,5 +299,5 @@ dl.info dt {
   top: 0;
   left: 0;
   bottom: auto;
-  min-height: 50vh;
+  height: 50vh;
 }
